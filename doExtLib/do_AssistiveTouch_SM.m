@@ -79,10 +79,66 @@
 - (void) panView:(UIPanGestureRecognizer *)panGestureRecognizer
 {
     UIView *view = panGestureRecognizer.view;
-    if (panGestureRecognizer.state == UIGestureRecognizerStateBegan || panGestureRecognizer.state == UIGestureRecognizerStateChanged) {
+    if (panGestureRecognizer.state == UIGestureRecognizerStateBegan || panGestureRecognizer.state == UIGestureRecognizerStateChanged)
+    {
         CGPoint translation = [panGestureRecognizer translationInView:view.superview];
         [view setCenter:(CGPoint){view.center.x + translation.x, view.center.y + translation.y}];
         [panGestureRecognizer setTranslation:CGPointZero inView:view.superview];
+    }
+    if (panGestureRecognizer.state == UIGestureRecognizerStateEnded)
+    {
+        CGFloat superviewWidth = view.superview.frame.size.width;
+        CGFloat superviewHeight = view.superview.frame.size.height;
+        if (view.center.x < superviewWidth / 2)
+        {
+            if (view.center.y < superviewHeight / 2)
+            {
+                if ((superviewHeight / 2 - view.center.y) > (superviewWidth / 2 - view.center.x))
+                {
+                    [view setCenter:(CGPoint){view.frame.size.width / 2, view.center.y}];
+                }
+                else
+                {
+                    [view setCenter:(CGPoint){view.center.x, view.frame.size.height / 2}];
+                }
+            }
+            else
+            {
+                if ((superviewHeight - view.center.y) > (view.center.x))
+                {
+                    [view setCenter:(CGPoint){view.frame.size.width / 2, view.center.y}];
+                }
+                else
+                {
+                    [view setCenter:(CGPoint){view.center.x, superviewHeight - view.frame.size.height / 2}];
+                }
+            }
+        }
+        else
+        {
+            if (view.center.y < superviewHeight / 2)
+            {
+                if ((superviewHeight / 2 - view.center.y) > (superviewWidth - view.center.x))
+                {
+                    [view setCenter:(CGPoint){view.center.x, view.frame.size.height / 2}];
+                }
+                else
+                {
+                    [view setCenter:(CGPoint){superviewWidth - view.frame.size.width / 2, view.center.y}];
+                }
+            }
+            else
+            {
+                if ((superviewHeight - view.center.y) > (superviewWidth - view.center.x))
+                {
+                    [view setCenter:(CGPoint){superviewWidth - view.frame.size.width / 2, view.center.y}];
+                }
+                else
+                {
+                    [view setCenter:(CGPoint){view.center.x, superviewHeight - view.frame.size.height / 2}];
+                }
+            }
+        }
     }
 }
 
