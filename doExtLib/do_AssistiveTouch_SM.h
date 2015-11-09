@@ -10,5 +10,5 @@
 #import "doSingletonModule.h"
 #import <UIKit/UIKit.h>
 @interface do_AssistiveTouch_SM : doSingletonModule<do_AssistiveTouch_ISM>
-@property (nonatomic, strong)UIImageView *imageView;
+
 @end
