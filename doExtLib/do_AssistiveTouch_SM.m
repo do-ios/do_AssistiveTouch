@@ -33,7 +33,15 @@
     //自己的代码实现
     NSString *_location = _dictParas[@"location"];
     NSString *_sourceImgPath = _dictParas[@"image"];
-    bool _isMove = [_dictParas[@"isMove"] boolValue];
+    bool _isMove = YES;
+    if (![_dictParas.allKeys containsObject:@"isMove"])
+    {
+        _isMove = YES;
+    }
+    else
+    {
+        _isMove = [_dictParas[@"isMove"] boolValue];
+    }
     if (_location == nil || _location.length == 0)
     {
         return;
