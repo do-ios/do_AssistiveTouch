@@ -58,13 +58,10 @@
     CGFloat y = [_array[1] floatValue];
     CGFloat width = _image.size.width;
     CGFloat height = _image.size.height;
-    if (self.imageView) {
-        self.imageView.hidden = NO;
-        return;
-    }
+    
     self.imageView = [[UIImageView alloc] initWithFrame:CGRectMake(x, y, width, height)];
     self.imageView.image = _image;
-    [[UIApplication sharedApplication].keyWindow addSubview:self.imageView];
+
     self.imageView.userInteractionEnabled = YES;
     UIPanGestureRecognizer *_panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panView:)];
     if (_isMove)
@@ -77,6 +74,11 @@
     }
     UITapGestureRecognizer *_singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapView:)];
     [self.imageView addGestureRecognizer:_singleTap];
+    if (self.imageView.isHidden) {
+        self.imageView.hidden = NO;
+        return;
+    }
+    [[UIApplication sharedApplication].keyWindow addSubview:self.imageView];
     [self setViewLocation:self.imageView];
 }
 //异步
