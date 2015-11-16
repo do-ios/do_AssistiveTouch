@@ -58,8 +58,8 @@
     CGFloat y = [_array[1] floatValue];
     CGFloat width = _image.size.width;
     CGFloat height = _image.size.height;
+    self.imageView.frame = CGRectMake(x, y, width, height);
     
-    self.imageView = [[UIImageView alloc] initWithFrame:CGRectMake(x, y, width, height)];
     self.imageView.image = _image;
 
     self.imageView.userInteractionEnabled = YES;
@@ -80,6 +80,13 @@
     }
     [[UIApplication sharedApplication].keyWindow addSubview:self.imageView];
     [self setViewLocation:self.imageView];
+}
+- (UIImageView *)imageView
+{
+    if (_imageView == nil) {
+        _imageView = [[UIImageView alloc]init];
+    }
+    return _imageView;
 }
 //异步
 
