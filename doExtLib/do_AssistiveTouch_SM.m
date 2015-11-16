@@ -12,8 +12,11 @@
 #import "doIScriptEngine.h"
 #import "doInvokeResult.h"
 #import "doIPage.h"
+#import "doUIModuleHelper.h"
+
 @interface do_AssistiveTouch_SM()
 @property (nonatomic, strong)UIImageView *imageView;
+@property (nonatomic, strong) UIPanGestureRecognizer *pangesture;
 @end
 @implementation do_AssistiveTouch_SM
 #pragma mark - 方法
@@ -48,7 +51,9 @@
     }
     
     NSString *_imgPath = [doIOHelper GetLocalFileFullPath: _scritEngine.CurrentPage.CurrentApp :_sourceImgPath];
+
     UIImage *_image = [[UIImage alloc]initWithContentsOfFile:_imgPath];
+    _image = [doUIModuleHelper imageWithImageSimple:_image scaledToSize:CGSizeMake(_image.size.width * _scritEngine.CurrentPage.RootView.XZoom, _image.size.height *     _scritEngine.CurrentPage.RootView.YZoom)];
     NSArray *_array = [_location componentsSeparatedByString:@","];
     if (_array.count == 0 || _array.count == 1)
     {
@@ -63,23 +68,24 @@
     self.imageView.image = _image;
 
     self.imageView.userInteractionEnabled = YES;
-    UIPanGestureRecognizer *_panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panView:)];
+//    UIPanGestureRecognizer *_panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panView:)];
     if (_isMove)
     {
-        [self.imageView addGestureRecognizer:_panGestureRecognizer];
+        [self.imageView addGestureRecognizer:self.pangesture];
     }
     else
     {
-        [self.imageView removeGestureRecognizer:_panGestureRecognizer];
+        [self.imageView removeGestureRecognizer:self.pangesture];
     }
     UITapGestureRecognizer *_singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapView:)];
     [self.imageView addGestureRecognizer:_singleTap];
+    [self setViewLocation:self.imageView];
     if (self.imageView.isHidden) {
         self.imageView.hidden = NO;
         return;
     }
     [[UIApplication sharedApplication].keyWindow addSubview:self.imageView];
-    [self setViewLocation:self.imageView];
+
 }
 - (UIImageView *)imageView
 {
@@ -87,6 +93,13 @@
         _imageView = [[UIImageView alloc]init];
     }
     return _imageView;
+}
+- (UIPanGestureRecognizer *)pangesture
+{
+    if (_pangesture  == nil) {
+        _pangesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panView:)];
+    }
+    return _pangesture;
 }
 //异步
 
