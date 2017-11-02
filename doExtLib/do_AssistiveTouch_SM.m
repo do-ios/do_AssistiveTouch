@@ -25,7 +25,10 @@
 - (void)hideView:(NSArray *)parms
 {
     //自己的代码实现
-    self.imageView.hidden = YES;
+    //    self.imageView.hidden = YES;
+    if (self.imageView.superview) {
+        [self.imageView removeFromSuperview];
+    }
     //_invokeResult设置返回值
 }
 - (void)showView:(NSArray *)parms
@@ -51,7 +54,7 @@
     }
     
     NSString *_imgPath = [doIOHelper GetLocalFileFullPath: _scritEngine.CurrentPage.CurrentApp :_sourceImgPath];
-
+    
     UIImage *_image = [[UIImage alloc]initWithContentsOfFile:_imgPath];
     _image = [doUIModuleHelper imageWithImageSimple:_image scaledToSize:CGSizeMake(_image.size.width * _scritEngine.CurrentPage.RootView.XZoom, _image.size.height *     _scritEngine.CurrentPage.RootView.YZoom)];
     NSArray *_array = [_location componentsSeparatedByString:@","];
@@ -66,9 +69,9 @@
     self.imageView.frame = CGRectMake(x, y, width, height);
     
     self.imageView.image = _image;
-
+    
     self.imageView.userInteractionEnabled = YES;
-//    UIPanGestureRecognizer *_panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panView:)];
+    //    UIPanGestureRecognizer *_panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panView:)];
     if (_isMove)
     {
         [self.imageView addGestureRecognizer:self.pangesture];
@@ -80,12 +83,15 @@
     UITapGestureRecognizer *_singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapView:)];
     [self.imageView addGestureRecognizer:_singleTap];
     [self setViewLocation:self.imageView];
-    if (self.imageView.isHidden) {
-        self.imageView.hidden = NO;
-        return;
-    }
+    //    if (self.imageView.isHidden) {
+    //        self.imageView.hidden = NO;
+    //        return;
+    //    }
     [[UIApplication sharedApplication].keyWindow addSubview:self.imageView];
-
+    //
+    //    dispatch_async(dispatch_get_main_queue(), ^{
+    //    });
+    
 }
 - (UIImageView *)imageView
 {
